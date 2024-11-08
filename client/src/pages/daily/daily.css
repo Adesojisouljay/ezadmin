@@ -1,0 +1,28 @@
+.daily-container {
+    margin: 1.5rem 2.5rem;
+  }
+  
+  .daily-container h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .daily-container p {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .chart-container {
+    height: 75vh;
+  }
+  
+  .date-pickers {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+  }
+  
+  .date-pickers > div {
+    margin-left: 1rem;
+  }
+  

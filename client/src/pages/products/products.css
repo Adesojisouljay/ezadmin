@@ -1,0 +1,33 @@
+.products-container {
+    margin: 1.5rem 2.5rem;
+  }
+  
+  .products-grid {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    justify-content: space-between;
+    row-gap: 20px;
+    column-gap: 1.33%;
+  }
+  
+  .product-card {
+    background-image: none;
+    /* background-color: var(--mui-palette-background-alt); */
+    border-radius: 0.55rem;
+  }
+  
+  .product-category {
+    font-size: 14px;
+    color: var(--mui-palette-secondary-700);
+  }
+  
+  .product-price {
+    margin-bottom: 1.5rem;
+    color: var(--mui-palette-secondary-400);
+  }
+  
+  .product-collapse {
+    color: var(--mui-palette-neutral-300);
+  }
+  

@@ -1,0 +1,24 @@
+.overview-container {
+    margin: 1.5rem 2.5rem;
+  }
+  
+  .chart-container {
+    height: 75vh;
+    margin-top: 1rem;
+  }
+  
+  .form-control {
+    margin-top: 1rem;
+  }
+  
+  .form-control label {
+    margin-right: 1rem;
+    font-weight: bold;
+  }
+  
+  .form-control select {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  

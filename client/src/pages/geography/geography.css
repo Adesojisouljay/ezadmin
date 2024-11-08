@@ -1,0 +1,11 @@
+.geography-container {
+    margin: 1.5rem 2.5rem;
+  }
+  
+  .map-container {
+    margin-top: 40px;
+    height: 75vh;
+    border: 1px solid #cccccc; /* Replace with your preferred color */
+    border-radius: 4px;
+  }
+  

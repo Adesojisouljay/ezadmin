@@ -20,6 +20,8 @@ import {
   ShoppingCartOutlined,
   Groups2Outlined,
   ReceiptLongOutlined,
+  PermIdentityOutlined,
+  WalletOutlined,
   PublicOutlined,
   PointOfSaleOutlined,
   TodayOutlined,
@@ -53,6 +55,18 @@ const navItems = [
   {
     text: "Transactions",
     icon: <ReceiptLongOutlined />,
+  },
+  {
+    text: "Kyc",
+    icon: <PermIdentityOutlined />,
+  },
+  {
+    text: "Fiat-Deposit",
+    icon: <WalletOutlined />,
+  },
+  {
+    text: "Fiat-Withdrawal",
+    icon: <WalletOutlined />,
   },
   {
     text: "Geography",
