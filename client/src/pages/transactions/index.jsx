@@ -10,11 +10,11 @@ const Transactions = () => {
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(20);
   const [sort, setSort] = useState({});
-  const [search, setSearch] = useState(""); // State for search input
+  const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]); // State for filtered data
-  const [total, setTotal] = useState(0); // Track the total number of transactions
+  const [filteredData, setFilteredData] = useState([]);
+  const [total, setTotal] = useState(0);
 
   const [searchInput, setSearchInput] = useState("");
 
@@ -25,9 +25,9 @@ const Transactions = () => {
         const response = await getAllTransactions();
         console.log(response);
         if (response.success) {
-          setData(response.transactionH || []); // Assuming 'transactions' is the array field
-          setFilteredData(response.transactionH || []); // Set both original and filtered data
-          setTotal(response.total || 0); // Assuming 'total' is the field for total count
+          setData(response.transactionH || []);
+          setFilteredData(response.transactionH || []);
+          setTotal(response.total || 0);
         }
       } catch (error) {
         console.log(error);
@@ -38,10 +38,9 @@ const Transactions = () => {
     getTransactions();
   }, []);
 
-  // Filter the transactions based on the search input
   useEffect(() => {
     if (!search) {
-      setFilteredData(data); // Reset to all data when search is cleared
+      setFilteredData(data);
     } else {
       const lowerCaseSearch = search.toLowerCase();
       const filtered = data.filter(
@@ -54,8 +53,8 @@ const Transactions = () => {
   }, [search, data]);
 
   const handleClearSearch = () => {
-    setSearch(""); // Clear the search state
-    setSearchInput(""); // Clear the input value
+    setSearch("");
+    setSearchInput("");
   };
 
   const columns = [
@@ -100,7 +99,7 @@ const Transactions = () => {
           variant="contained"
           color="primary"
           onClick={handleClearSearch}
-          disabled={!search} // Disable button if no search is active
+          disabled={!search}
         >
           See All Transactions
         </Button>

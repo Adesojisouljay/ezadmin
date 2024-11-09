@@ -161,6 +161,8 @@ const Customers = () => {
                 >
                   <MenuItem value="user">User</MenuItem>
                   <MenuItem value="admin">Admin</MenuItem>
+                  <MenuItem value="modadmin">Mod admin</MenuItem>
+                  <MenuItem value="merchant">Merchant</MenuItem>
                 </Select>
               </FormControl>
 
