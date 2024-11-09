@@ -73,6 +73,10 @@ const navItems = [
     icon: <PublicOutlined />,
   },
   {
+    text: "Profits",
+    icon: <PublicOutlined />,
+  },
+  {
     text: "Sales",
     icon: null,
   },

@@ -269,3 +269,51 @@ export const getAllUsers = async () => {
     }
   };
   
+  export const getAllProfits = async () => {
+    try {
+      const response = await api.get('/profits/all', {
+        headers: { Authorization: authToken },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching all profits:', error);
+      throw error;
+    }
+  };
+  
+  export const getProfitsByUserId = async (userId) => {
+    try {
+      const response = await api.get(`/profits/user/${userId}`, {
+        headers: { Authorization: authToken },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching profits by user ID:', error);
+      throw error;
+    }
+  };
+  
+  export const getProfitByTransactionId = async (transactionId) => {
+    try {
+      const response = await api.get(`/profits/transaction/${transactionId}`, {
+        headers: { Authorization: authToken },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching profit by transaction ID:', error);
+      throw error;
+    }
+  };
+  
+  export const getProfitsByTimePeriod = async (startDate, endDate) => {
+    try {
+      const response = await api.get(`/profits/period?start=${startDate}&end=${endDate}`, {
+        headers: { Authorization: authToken },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching profits by time period:', error);
+      throw error;
+    }
+  };
+  
