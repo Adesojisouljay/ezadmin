@@ -20,6 +20,7 @@ import Performance from "pages/performance";
 import Kyc from "pages/kyc";
 import FiatDeposit from "pages/Fiat-deposit";
 import FiatWithdrawalAction from "pages/fiat-withdrawal";
+import EmailBroadcast from "pages/email-broadcast";
 import { Login } from "pages/login";
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
               <Route path="/profits" element={<Profits />} />
               <Route path="/products" element={<Products />} />
               <Route path="/customers" element={<Customers />} />
+              <Route path="/email-broadcast" element={<EmailBroadcast />} />
               <Route path="/kyc" element={<Kyc />} />
               <Route path="/fiat-deposit" element={<FiatDeposit />} />
               <Route path="/fiat-withdrawal" element={<FiatWithdrawalAction />} />
