@@ -45,11 +45,6 @@ export const getAllUsers = async () => {
 
   export const getAllTransactions = async () => {
     try {
-        // const config = {
-        //     headers: {
-        //       Authorization: `${authToken}`,
-        //     },
-        //   };
       const response = await api.get(`/transactions/all`);
       return response.data;
     } catch (error) {

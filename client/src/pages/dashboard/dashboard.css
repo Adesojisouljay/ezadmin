@@ -87,3 +87,11 @@
     color: var(--mui-palette-secondary-200) !important;
   }
   
+  .loading-container, error-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+  }
+  

@@ -13,6 +13,7 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
+  CircularProgress,
 } from "@mui/material";
 import StatBox from "components/StatBox";
 import "./dashboard.css";
@@ -22,41 +23,51 @@ const Dashboard = () => {
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const [users, setUsers] = useState([]);
   const [profits, setProfits] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingUsers, setIsLoadingUsers] = useState(false);
+  const [isLoadingProfits, setIsLoadingProfits] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const getUsers = async () => {
-      setIsLoading(true);
+    const fetchUsers = async () => {
+      setIsLoadingUsers(true);
+      setError(null);
       try {
         const response = await getAllUsers();
         if (response.success) {
           setUsers(response.users);
+        } else {
+          setError('Failed to fetch users');
         }
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching users:", error);
+        setError('An error occurred while fetching users');
       } finally {
-        setIsLoading(false);
+        setIsLoadingUsers(false);
       }
     };
-    getUsers();
+    fetchUsers();
   }, []);
 
   useEffect(() => {
-    const getProfits = async () => {
-      setIsLoading(true);
+    const fetchProfits = async () => {
+      setIsLoadingProfits(true);
+      setError(null);
       try {
         const response = await getAllProfits();
-        console.log(response)
         if (response.success) {
           setProfits(response.data);
+        } else {
+          setError('Failed to fetch profits');
         }
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching profits:", error);
+        setError('An error occurred while fetching profits');
       } finally {
-        setIsLoading(false);
+        setIsLoadingProfits(false);
       }
     };
-    getProfits();
+    fetchProfits();
+    countSales();
   }, []);
 
   const calculateProfits = (timeRange) => {
@@ -76,6 +87,10 @@ const Dashboard = () => {
         startDate = new Date(currentDate.setMonth(currentDate.getMonth() - 1));
         endDate = new Date();
         break;
+      case "sixMonths":
+        startDate = new Date(currentDate.setMonth(currentDate.getMonth() - 6));
+        endDate = new Date();
+        break;
       case "year":
         startDate = new Date(currentDate.setFullYear(currentDate.getFullYear() - 1));
         endDate = new Date();
@@ -88,7 +103,39 @@ const Dashboard = () => {
 
     return profits
       .filter((profit) => new Date(profit.timestamp) >= startDate)
-      .reduce((total, profit) => total + profit.nairaFee, 0).toFixed(3);
+      .reduce((total, profit) => total + profit.nairaFee, 0)
+      .toFixed(3);
+  };
+
+  const calculateSales = (timeRange) => {
+    const currentDate = new Date();
+    let startDate;
+
+    switch (timeRange) {
+      case "day":
+        startDate = new Date(currentDate.setDate(currentDate.getDate() - 1));
+        break;
+      case "week":
+        startDate = new Date(currentDate.setDate(currentDate.getDate() - 7));
+        break;
+      case "month":
+        startDate = new Date(currentDate.setMonth(currentDate.getMonth() - 1));
+        break;
+      case "sixMonths":
+        startDate = new Date(currentDate.setMonth(currentDate.getMonth() - 6));
+        break;
+      case "year":
+        startDate = new Date(currentDate.setFullYear(currentDate.getFullYear() - 1));
+        break;
+      default:
+        startDate = new Date(currentDate.setDate(currentDate.getDate() - 1)); // Default: 1 day
+        break;
+    }
+
+    return profits
+      .filter((profit) => new Date(profit.timestamp) >= startDate)
+      .reduce((total, profit) => total + profit.nairaAmount, 0)
+      .toFixed(2);
   };
 
   const calculatePercentageChange = (currentProfit, previousProfit) => {
@@ -98,8 +145,8 @@ const Dashboard = () => {
 
   const calculateProfitsWithPercentage = (timeRange) => {
     const currentProfit = parseFloat(calculateProfits(timeRange));
-
     let previousProfit = 0;
+
     switch (timeRange) {
       case "today":
         previousProfit = parseFloat(calculateProfits("yesterday"));
@@ -109,6 +156,9 @@ const Dashboard = () => {
         break;
       case "month":
         previousProfit = parseFloat(calculateProfits("previousMonth"));
+        break;
+      case "sixMonths":
+        previousProfit = parseFloat(calculateProfits("previousSixMonths"));
         break;
       case "year":
         previousProfit = parseFloat(calculateProfits("previousYear"));
@@ -122,11 +172,55 @@ const Dashboard = () => {
     return { currentProfit, percentageChange };
   };
 
+  const countSales = (timeRange) => {
+    const currentDate = new Date();
+    let startDate;
+  
+    switch (timeRange) {
+      case "day":
+        startDate = new Date(currentDate.setDate(currentDate.getDate() - 1));
+        break;
+      case "week":
+        startDate = new Date(currentDate.setDate(currentDate.getDate() - 7));
+        break;
+      case "month":
+        startDate = new Date(currentDate.setMonth(currentDate.getMonth() - 1));
+        break;
+      case "sixMonths":
+        startDate = new Date(currentDate.setMonth(currentDate.getMonth() - 6));
+        break;
+      case "year":
+        startDate = new Date(currentDate.setFullYear(currentDate.getFullYear() - 1));
+        break;
+      default:
+        startDate = new Date(currentDate.setDate(currentDate.getDate() - 1)); // Default: 1 day
+        break;
+    }
+  
+    return profits.filter((profit) => new Date(profit.timestamp) >= startDate).length;
+  };
+
+  if (isLoadingUsers || isLoadingProfits) {
+    return (
+      <Box className="loading-container">
+        <CircularProgress />
+        <Typography>Loading data...</Typography>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box className="error-container">
+        <Typography color="error">{error}</Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box className="dashboard-container">
       <FlexBetween>
         <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
-
         <Box>
           <Button className="download-button">
             <DownloadOutlined className="download-icon" />
@@ -138,7 +232,7 @@ const Dashboard = () => {
       <Box className="dashboard-grid">
         <StatBox
           title="Total Customers"
-          value={users && users?.length}
+          value={users.length}
           increase="+14%"
           description="Since last month"
           icon={<PersonAdd className="statbox-icon" />}
@@ -148,42 +242,49 @@ const Dashboard = () => {
       <Box className="dashboard-grid">
         <StatBox
           title="Sales Today"
-          value={users && users?.length}
-          increase="+21%"
-          description="Since last day"
+          value={`₦${calculateSales("day")}`}
+          increase="+21%" // Can be updated dynamically
+          description={`${countSales("day")} sale in the last day`}
           icon={<PointOfSale className="statbox-icon" />}
         />
         <StatBox
-          title="Sales in last one week"
-          value={users && users?.length}
+          title="Sales in Last One Week"
+          value={`₦${calculateSales("week")}`}
           increase="+21%"
-          description="Since one week"
+          description={`${countSales("week")} sales in the last week`}
           icon={<PointOfSale className="statbox-icon" />}
         />
         <StatBox
-          title="Sales in last one month"
-          value={users && users?.length}
+          title="Sales in Last One Month"
+          value={`₦${calculateSales("month")}`}
           increase="+5%"
-          description="Since last month"
+          description={`${countSales("month")} sales in the last month`}
           icon={<PointOfSale className="statbox-icon" />}
         />
         <StatBox
-          title="Sales in last one year"
-          value={users && users?.length}
+          title="Sales in Last 6 Months"
+          value={`₦${calculateSales("sixMonths")}`}
+          increase="+15%"
+          description={`${countSales("sixMonths")} sales in the last 6 months`}
+          icon={<PointOfSale className="statbox-icon" />}
+        />
+        <StatBox
+          title="Sales in Last Year"
+          value={`₦${calculateSales("year")}`}
           increase="+43%"
-          description="Since last year"
+          description={`${countSales("year")} sales in the last year`}
           icon={<PointOfSale className="statbox-icon" />}
         />
       </Box>
 
       <Box className="dashboard-grid">
-        {["day", "week", "month", "year"].map((timeRange) => {
+        {["day", "week", "month", "sixMonths", "year"].map((timeRange) => {
           const { currentProfit, percentageChange } = calculateProfitsWithPercentage(timeRange);
 
           return (
             <StatBox
               key={timeRange}
-              title={`Profits in last ${timeRange}`}
+              title={`Profits in Last ${timeRange}`}
               value={`₦${currentProfit}`}
               increase={`${percentageChange > 0 ? "+" : ""}${percentageChange.toFixed(2)}%`}
               description={`Since last ${timeRange}`}
