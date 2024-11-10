@@ -312,3 +312,24 @@ export const getAllUsers = async () => {
     }
   };
   
+  export const sendEmailBroadcast = async (subject, message) => {
+    try {
+      const response = await api.post('auth/users/broadcast-email', {
+        subject,
+        message,
+      }, {
+        headers: {
+          Authorization: authToken,
+        }
+      });
+      
+      console.log(response);
+      if (response.data.success) {
+        console.log("Broadcast email sent successfully!");
+      } else {
+        console.error("Failed to send broadcast email:", response.data.message);
+      }
+    } catch (error) {
+      console.error("Error sending broadcast email:", error);
+    }
+  };
