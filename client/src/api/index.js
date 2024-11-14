@@ -388,3 +388,44 @@ export const getAllUsers = async () => {
       throw error;
     }
   };
+
+  export const toggleAppMode = async (mode) => {
+    try {
+      const response = await api.post('/app/mode/toggle-app', { mode }, {
+        headers: {
+          Authorization: authToken,
+        },
+      });
+  
+      if (response?.data?.message) {
+        console.log(response.data.message);
+        return response.data;
+      } else {
+        console.error('Failed to update user status:', response?.data?.message);
+        return null;
+      }
+    } catch (error) {
+      console.error('Error updating user status:', error);
+      throw error;
+    }
+  };
+  export const getAppMode = async () => {
+    try {
+      const response = await api.get('/app/get-app-mode', {
+        headers: {
+          Authorization: authToken,
+        },
+      });
+  
+      if (response?.data?.message) {
+        console.log(response.data);
+        return response.data;
+      } else {
+        console.error('Failed to update user status:', response?.data?.message);
+        return null;
+      }
+    } catch (error) {
+      console.error('Error updating user status:', error);
+      throw error;
+    }
+  };

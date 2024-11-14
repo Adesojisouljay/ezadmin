@@ -21,6 +21,17 @@
     grid-auto-rows: 160px;
     gap: 20px;
   }
+
+  .dashboard-top{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    /* width: 100%; */
+  }
+  
+  .dashboard-customers{
+    width: 25%;
+  }
   
   .overview-chart-box {
     grid-column: span 8;
