@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Modal, TextField, Typography, Divider, MenuItem, Select, FormControl, InputLabel } from "@mui/material";
+import { Box, Button, Modal, TextField, Typography, Divider, MenuItem, Select, FormControl, InputLabel, FormControlLabel, Switch } from "@mui/material";
 import Header from "components/Header";
 import { DataGrid } from "@mui/x-data-grid";
 import './customers.css';
-import { getAllUsers, editUser } from "../../api/index";
+import { getAllUsers, editUser, toggleUserSuspension } from "../../api/index";
 
 const Customers = () => {
   const [data, setData] = useState([]);
@@ -80,6 +80,16 @@ const Customers = () => {
     setSelectedUser({ ...selectedUser, accounts: updatedAccounts });
   };
 
+  const toggleUserStatus = async (userId, isSuspended) => {
+    try {
+      const response = await toggleUserSuspension(userId, isSuspended);
+      console.log(response)
+      window.location.reload();
+    } catch (error) {
+      console.log("Error toggling user suspension:", error);
+    }
+  };
+
   const columns = [
     { field: "_id", headerName: "User Id", flex: 1 },
     { field: "firstName", headerName: "First Name", flex: 0.5 },
@@ -131,6 +141,18 @@ const Customers = () => {
           <h2>Edit User</h2>
           {selectedUser && (
             <>
+            <FormControlLabel
+                control={
+                  <Switch
+                    checked={!selectedUser.isSuspended}
+                    onChange={() => toggleUserStatus(selectedUser._id, !selectedUser.isSuspended)}
+                  />
+                }
+                label={selectedUser.isSuspended ? "This user is SUSPENDED(toggle to activate account)" : 
+                "This user is ACTIVE (toggle to suspend account)"}
+                labelPlacement="start"
+                sx={{ '.MuiFormControlLabel-label': { fontWeight: 'bold' } }}
+              />
               {/* Basic User Information */}
               <TextField
                 label="First Name"

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import FlexBetween from "components/FlexBetween";
 import Header from "components/Header";
-import { getAllUsers, getAllProfits } from "../../api/index";
+import { getAllUsers, getAllProfits, updatePricePercentage, getCurrenctPricePercentage, toggleAppMode, getAppMode } from "../../api/index";
 import {
   DownloadOutlined,
   PointOfSale,
@@ -14,6 +14,7 @@ import {
   useTheme,
   useMediaQuery,
   CircularProgress,
+  Switch
 } from "@mui/material";
 import StatBox from "components/StatBox";
 import "./dashboard.css";
@@ -26,6 +27,10 @@ const Dashboard = () => {
   const [isLoadingUsers, setIsLoadingUsers] = useState(false);
   const [isLoadingProfits, setIsLoadingProfits] = useState(false);
   const [error, setError] = useState(null);
+  const [newPercent, setNewPercent] = useState(0);
+  const [currentPercentage, setCurrentPercentage] = useState(0)
+  const [isLoadingPercentage, setIsLoadingPercentage] = useState(false);
+  const [maintenanceMode, setMaintenanceMode] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -69,6 +74,44 @@ const Dashboard = () => {
     fetchProfits();
     countSales();
   }, []);
+  
+  useEffect(() => {
+    const getPercentage = async () => {
+      setIsLoadingPercentage(true);
+      setError(null);
+      try {
+        const response = await getCurrenctPricePercentage();
+        if (response?.success) {
+          setCurrentPercentage(response?.currentPercentage);
+        } else {
+          setError('Failed to fetch current percentage');
+        }
+      } catch (error) {
+        console.error("Error fetching profits:", error);
+        setError('An error occurred while fetching profits');
+      } finally {
+        setIsLoadingPercentage(false);
+      }
+    };
+    getPercentage();
+  }, []);
+
+  useEffect(() => {
+    const getMode = async () => {
+      try {
+        const response = await getAppMode();
+        // if (response?.data?.message) {
+          console.log(response?.maintenanceRecord?.isMaintenance);
+          setMaintenanceMode(response?.maintenanceRecord?.isMaintenance);
+        // } else {
+          // console.error("Failed to toggle maintenance mode:", response?.data?.message);
+        // }
+      } catch (error) {
+        console.error("Error getting maintenance mode:", error);
+      }
+    };
+    getMode()
+  }, [])
 
   const calculateProfits = (timeRange) => {
     const currentDate = new Date();
@@ -200,6 +243,26 @@ const Dashboard = () => {
     return profits.filter((profit) => new Date(profit.timestamp) >= startDate).length;
   };
 
+  const updatePrices = async () => {
+    try {
+      const response = await updatePricePercentage(newPercent)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const toggleMaintenanceMode = async () => {
+    console.log(maintenanceMode)
+    try {
+      const response = await toggleAppMode(!maintenanceMode);
+      console.log(response.maintenanceRecord.isMaintenance)
+      setMaintenanceMode(response.maintenanceRecord.isMaintenance)
+      
+    } catch (error) {
+      console.error("Error updating maintenance mode:", error);
+    }
+  };
+
   if (isLoadingUsers || isLoadingProfits) {
     return (
       <Box className="loading-container">
@@ -229,15 +292,51 @@ const Dashboard = () => {
         </Box>
       </FlexBetween>
 
-      <Box className="dashboard-grid">
-        <StatBox
-          title="Total Customers"
-          value={users.length}
-          increase="+14%"
-          description="Since last month"
-          icon={<PersonAdd className="statbox-icon" />}
-        />
+      <Box className="dashboard-grid dashboard-top">
+        <Box
+          className="dashboard-customers"
+        >
+          <StatBox
+            title="Total Customers"
+            value={users.length}
+            increase="+14%"
+            description="Since last month"
+            icon={<PersonAdd className="statbox-icon" />}
+          />
+        </Box>
+        
+        <Box >
+        <>
+          <h2>Update Price Percent</h2>
+          <h3>Currenct Percentage: {currentPercentage}%</h3>
+          <Box display="flex" flexDirection="flex" alignItems="center">
+            <input
+              type="number"
+              value={newPercent || null}
+              onChange={(e) => setNewPercent(Number(e.target.value))}
+              placeholder="Enter new percentage"
+              style={{ marginBottom: '10px', padding: '5px', width: '300px' }}
+            />
+            <Button variant="contained" color="primary" width="150px" onClick={updatePrices}>
+              {isLoadingPercentage ? "Update..." :  "Update"}
+            </Button>
+          </Box>
+        </>
+        </Box>
+
+        {/* Maintenance Mode Switch */}
+        <Box>
+          <Typography variant="h6">Maintenance Mode</Typography>
+          <Switch
+            checked={!maintenanceMode}
+            onChange={toggleMaintenanceMode}
+            color="primary"
+          />
+          <Typography variant="body1">{maintenanceMode ? "App is in maintenance mode" : "App is active"}</Typography>
+        </Box>
+
       </Box>
+
 
       <Box className="dashboard-grid">
         <StatBox
