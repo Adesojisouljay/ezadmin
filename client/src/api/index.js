@@ -333,3 +333,58 @@ export const getAllUsers = async () => {
       console.error("Error sending broadcast email:", error);
     }
   };
+
+  export const updatePricePercentage = async (newPercentage) => {
+    try {
+  
+      const response = await api.post('/prices/update-price-percentage', { newPercentage }, {
+        headers: {
+          Authorization: authToken,
+        },
+      });
+
+     return response.data
+  
+    } catch (error) {
+      console.error('Error updating price percentage:', error.message);
+      return { success: false, message: error.message };
+    }
+  };
+
+  export const getCurrenctPricePercentage = async () => {
+    try {
+  
+      const response = await api.get('/prices/price-percentage', {
+        headers: {
+          Authorization: authToken,
+        },
+      });
+
+     return response.data
+  
+    } catch (error) {
+      console.error('Error updating price percentage:', error.message);
+      return { success: false, message: error.message };
+    }
+  };
+
+  export const toggleUserSuspension = async (userId, isSuspended) => {
+    try {
+      const response = await api.post('auth/users/toggle-account-status', { userId, isSuspended }, {
+        headers: {
+          Authorization: authToken,
+        },
+      });
+  
+      if (response?.data?.message) {
+        console.log(response.data.message);
+        return response.data;
+      } else {
+        console.error('Failed to update user status:', response?.data?.message);
+        return null;
+      }
+    } catch (error) {
+      console.error('Error updating user status:', error);
+      throw error;
+    }
+  };

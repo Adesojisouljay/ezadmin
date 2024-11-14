@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import FlexBetween from "components/FlexBetween";
 import Header from "components/Header";
-import { getAllUsers, getAllProfits } from "../../api/index";
+import { getAllUsers, getAllProfits, updatePricePercentage, getCurrenctPricePercentage } from "../../api/index";
 import {
   DownloadOutlined,
   PointOfSale,
@@ -26,6 +26,9 @@ const Dashboard = () => {
   const [isLoadingUsers, setIsLoadingUsers] = useState(false);
   const [isLoadingProfits, setIsLoadingProfits] = useState(false);
   const [error, setError] = useState(null);
+  const [newPercent, setNewPercent] = useState(0);
+  const [currentPercentage, setCurrentPercentage] = useState(0)
+  const [isLoadingPercentage, setIsLoadingPercentage] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -68,6 +71,28 @@ const Dashboard = () => {
     };
     fetchProfits();
     countSales();
+  }, []);
+  
+  useEffect(() => {
+    const getPercentage = async () => {
+      setIsLoadingPercentage(true);
+      setError(null);
+      try {
+        const response = await getCurrenctPricePercentage();
+        console.log(response)
+        if (response?.success) {
+          setCurrentPercentage(response?.currentPercentage);
+        } else {
+          setError('Failed to fetch current percentage');
+        }
+      } catch (error) {
+        console.error("Error fetching profits:", error);
+        setError('An error occurred while fetching profits');
+      } finally {
+        setIsLoadingPercentage(false);
+      }
+    };
+    getPercentage();
   }, []);
 
   const calculateProfits = (timeRange) => {
@@ -200,6 +225,14 @@ const Dashboard = () => {
     return profits.filter((profit) => new Date(profit.timestamp) >= startDate).length;
   };
 
+  const updatePrices = async () => {
+    try {
+      const response = await updatePricePercentage(newPercent)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   if (isLoadingUsers || isLoadingProfits) {
     return (
       <Box className="loading-container">
@@ -237,7 +270,28 @@ const Dashboard = () => {
           description="Since last month"
           icon={<PersonAdd className="statbox-icon" />}
         />
+        
+        <Box >
+        <>
+          <h2>Update Price Percent</h2>
+          <h3>Currenct Percentage: {currentPercentage}%</h3>
+          <Box display="flex" flexDirection="flex" alignItems="center">
+            <input
+              type="number"
+              value={newPercent || null}
+              onChange={(e) => setNewPercent(Number(e.target.value))}
+              placeholder="Enter new percentage"
+              style={{ marginBottom: '10px', padding: '5px', width: '300px' }}
+            />
+            <Button variant="contained" color="primary" width="150px" onClick={updatePrices}>
+              {isLoadingPercentage ? "Update..." :  "Update"}
+            </Button>
+          </Box>
+        </>
+        </Box>
+
       </Box>
+
 
       <Box className="dashboard-grid">
         <StatBox
