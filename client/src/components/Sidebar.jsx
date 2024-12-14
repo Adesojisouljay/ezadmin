@@ -69,6 +69,10 @@ const navItems = [
     icon: <WalletOutlined />,
   },
   {
+    text: "Merchants",
+    icon: <WalletOutlined />,
+  },
+  {
     text: "Geography",
     icon: <PublicOutlined />,
   },

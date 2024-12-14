@@ -22,6 +22,7 @@ import FiatDeposit from "pages/Fiat-deposit";
 import FiatWithdrawalAction from "pages/fiat-withdrawal";
 import EmailBroadcast from "pages/email-broadcast";
 import { Login } from "pages/login";
+import MerchantManagement from "pages/merchant";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -34,7 +35,7 @@ function App() {
           <Routes>
               <Route path="/login" element={<Login />} />
             <Route element={<Layout />}>
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/" element={<Navigate to="/login" replace />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/profits" element={<Profits />} />
               <Route path="/products" element={<Products />} />
@@ -43,6 +44,7 @@ function App() {
               <Route path="/kyc" element={<Kyc />} />
               <Route path="/fiat-deposit" element={<FiatDeposit />} />
               <Route path="/fiat-withdrawal" element={<FiatWithdrawalAction />} />
+              <Route path="/merchants" element={<MerchantManagement />} />
               <Route path="/transactions" element={<Transactions />} />
               <Route path="/geography" element={<Geography />} />
               <Route path="/overview" element={<Overview />} />
