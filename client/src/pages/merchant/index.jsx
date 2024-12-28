@@ -8,7 +8,8 @@ import {
   disapproveMerchant,
   updateMerchant,
   deleteMerchant,
-  updateMerchantBalance
+  updateMerchantBalance,
+  updateMerchantWithdrawalBalance
 } from "../../api/index";
 
 const MerchantManagement = () => {
@@ -20,6 +21,7 @@ const MerchantManagement = () => {
   const [selectedMerchant, setSelectedMerchant] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newMerchantBalance, setNewMerchantBalance] = useState(0)
+  const [newWithdrawalMerchantBalance, setNewMerchantWithdrawalBalance] = useState(0)
 
   useEffect(() => {
     fetchMerchants();
@@ -142,6 +144,40 @@ const MerchantManagement = () => {
     } catch (error) {
       console.error("Failed to update merchant balance:", error);
     }
+  };
+
+  const handleUpdateWithdrawalBalance = async (merchantId) => {
+    try {
+      const result = await updateMerchantWithdrawalBalance({
+        merchantId,
+        amount: Number(newWithdrawalMerchantBalance),
+        operation: "set",
+      });
+      console.log(result);
+      if (result?.success) {
+        const updatedBalance = result.data.updatedBalance;
+        
+        // Update the selectedMerchant state with the new balance
+        setSelectedMerchant((prev) => ({
+          ...prev,
+          merchantWithdrawalBalance: updatedBalance,
+        }));
+  
+        // Update the merchants array to reflect the updated balance
+        setMerchants((prevMerchants) =>
+          prevMerchants.map((merchant) =>
+            merchant._id === merchantId
+              ? { ...merchant, merchantWithdrawalBalance: updatedBalance }
+              : merchant
+          )
+        );
+        setNewMerchantWithdrawalBalance(0);
+  
+        console.log("Updated Balance:", updatedBalance);
+      }
+    } catch (error) {
+      console.error("Failed to update merchant balance:", error);
+    }
   };  
 
   const columns = [
@@ -245,36 +281,76 @@ const MerchantManagement = () => {
       {selectedMerchant && (
         <Dialog open={isModalOpen} onClose={handleCloseModal} maxWidth="md" fullWidth>
           <DialogTitle>Merchant Details</DialogTitle>
-            <DialogActions style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                <DialogTitle style={{display: "flex", alignItems: "center", gap: "2px"}}>
-                    Last Topped:{" "}
-                    <span style={{ fontWeight: "bold", fontSize: "18px" }}>{selectedMerchant.lastToppedAmount}</span>
-                </DialogTitle>
-                <DialogTitle style={{display: "flex", alignItems: "center", gap: "2px"}}>
-                    Total Spent:{" "}
-                    <span style={{ fontWeight: "bold", fontSize: "18px" }}>{selectedMerchant.totalSpent}</span>
-                </DialogTitle>
-                <DialogTitle style={{display: "flex", alignItems: "center", gap: "2px"}}>
-                    Merchant Balance:{" "}
-                    <span style={{ fontWeight: "bold", fontSize: "18px" }}>{selectedMerchant.merchantBalance}</span>
-                </DialogTitle>
-                <TextField
-                    label="Update merchant balance"
-                    value={newMerchantBalance}
-                    onChange={(e) => setNewMerchantBalance(e.target.value)}
-                    margin="dense"
-                    size="small"
-                    type="number"
-                />
-                <Button
-                    variant="contained"
-                    color="success"
-                    onClick={()=> handleUpdateBalance(selectedMerchant._id)}
-                    style={{ padding: "6px 16px", width: "150px" }}
-                >
-                    Top Up
-                </Button>
-            </DialogActions>
+
+            <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+                <h2>Deposit Funds</h2>
+                <DialogActions style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <DialogTitle style={{display: "flex", alignItems: "center", gap: "2px"}}>
+                        Last Topped:{" "}
+                        <span style={{ fontWeight: "bold", fontSize: "18px" }}>{selectedMerchant.lastToppedAmount}</span>
+                    </DialogTitle>
+                    <DialogTitle style={{display: "flex", alignItems: "center", gap: "2px"}}>
+                        Total Spent:{" "}
+                        <span style={{ fontWeight: "bold", fontSize: "18px" }}>{selectedMerchant.totalSpent}</span>
+                    </DialogTitle>
+                    <DialogTitle style={{display: "flex", alignItems: "center", gap: "2px"}}>
+                        Merchant Balance:{" "}
+                        <span style={{ fontWeight: "bold", fontSize: "18px" }}>{selectedMerchant.merchantBalance}</span>
+                    </DialogTitle>
+                    <TextField
+                        label="Update merchant balance"
+                        value={newMerchantBalance}
+                        onChange={(e) => setNewMerchantBalance(e.target.value)}
+                        margin="dense"
+                        size="small"
+                        type="number"
+                    />
+                    <Button
+                        variant="contained"
+                        color="success"
+                        onClick={()=> handleUpdateBalance(selectedMerchant._id)}
+                        style={{ padding: "6px 16px", width: "150px" }}
+                    >
+                        Top Up
+                    </Button>
+                </DialogActions>
+            </div>
+
+            <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+              <h2>
+                  Withdrawal Funds
+              </h2>
+              <DialogActions style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <DialogTitle style={{display: "flex", alignItems: "center", gap: "2px"}}>
+                      Last Topped:{" "}
+                      <span style={{ fontWeight: "bold", fontSize: "18px" }}>{selectedMerchant.lastToppedWithdrawalAmount}</span>
+                  </DialogTitle>
+                  <DialogTitle style={{display: "flex", alignItems: "center", gap: "2px"}}>
+                      Total Spent:{" "}
+                      <span style={{ fontWeight: "bold", fontSize: "18px" }}>{selectedMerchant.totalWithdrawalSpent}</span>
+                  </DialogTitle>
+                  <DialogTitle style={{display: "flex", alignItems: "center", gap: "2px"}}>
+                      Merchant Balance:{" "}
+                      <span style={{ fontWeight: "bold", fontSize: "18px" }}>{selectedMerchant.merchantWithdrawalBalance}</span>
+                  </DialogTitle>
+                  <TextField
+                      label="Update merchant balance"
+                      value={newWithdrawalMerchantBalance}
+                      onChange={(e) => setNewMerchantWithdrawalBalance(e.target.value)}
+                      margin="dense"
+                      size="small"
+                      type="number"
+                  />
+                  <Button
+                      variant="contained"
+                      color="success"
+                      onClick={()=> handleUpdateWithdrawalBalance(selectedMerchant._id)}
+                      style={{ padding: "6px 16px", width: "150px" }}
+                  >
+                      Top Up
+                  </Button>
+              </DialogActions>
+            </div>
 
           <DialogContent>
             <Typography><strong>Username:</strong> {selectedMerchant.username}</Typography>
