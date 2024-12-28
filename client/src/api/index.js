@@ -563,3 +563,28 @@ export const updateMerchantBalance = async ({ merchantId, amount, operation }) =
     throw error.response?.data || error;
   }
 };
+
+export const updateMerchantWithdrawalBalance = async ({ merchantId, amount, operation }) => {
+  try {
+    const response = await api.post(
+      '/merchant/update-withdrawal-balance',
+      { merchantId, amount, operation },
+      {
+        headers: {
+          Authorization: authToken,
+        },
+      }
+    );
+
+    if (response?.data.success) {
+      console.log("Merchant balance updated successfully:", response.data);
+      return response.data;
+    } else {
+      console.error("Failed to update merchant balance:", response?.data?.message);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error updating merchant balance:", error.response?.data || error.message);
+    throw error.response?.data || error;
+  }
+};
