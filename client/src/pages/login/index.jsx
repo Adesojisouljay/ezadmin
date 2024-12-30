@@ -28,7 +28,7 @@ export const Login = () => {
         localStorage.setItem("authToken", response.data.token);
 
         // Redirect to the dashboard
-        navigate("/dashboard");
+        window.location.href = "/dashboard";
         setLoading(false);
       } else {
         setError(response?.data?.error);
