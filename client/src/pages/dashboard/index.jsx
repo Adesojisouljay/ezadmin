@@ -18,10 +18,13 @@ import {
 } from "@mui/material";
 import StatBox from "components/StatBox";
 import "./dashboard.css";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
+  const navigate = useNavigate()
+  
   const [users, setUsers] = useState([]);
   const [profits, setProfits] = useState([]);
   const [isLoadingUsers, setIsLoadingUsers] = useState(false);
@@ -31,6 +34,14 @@ const Dashboard = () => {
   const [currentPercentage, setCurrentPercentage] = useState(0)
   const [isLoadingPercentage, setIsLoadingPercentage] = useState(false);
   const [maintenanceMode, setMaintenanceMode] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+
+    if(!token) {
+      navigate("/login")
+    }
+  })
 
   useEffect(() => {
     const fetchUsers = async () => {
