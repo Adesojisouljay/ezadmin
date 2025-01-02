@@ -118,6 +118,9 @@ const Customers = () => {
           getRowId={(row) => row?._id}
           rows={data}
           columns={columns}
+          autoHeight
+          pageSize={10}
+          rowsPerPageOptions={[10, 20, 50]}
         />
       </Box>
 

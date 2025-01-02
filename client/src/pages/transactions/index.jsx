@@ -110,15 +110,18 @@ const Transactions = () => {
           getRowId={(row) => row._id}
           rows={filteredData || []}
           columns={columns}
-          rowCount={total}
-          rowsPerPageOptions={[20, 50, 100]}
-          pagination
-          page={page}
-          pageSize={pageSize}
-          paginationMode="server"
-          sortingMode="server"
-          onPageChange={(newPage) => setPage(newPage)}
-          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+          // rowCount={total}
+          // rowsPerPageOptions={[20, 50, 100]}
+          // pagination
+          // page={page}
+          // pageSize={pageSize}
+          autoHeight
+          pageSize={10}
+          rowsPerPageOptions={[10, 20, 50]}
+          // paginationMode="server"
+          // sortingMode="server"
+          // onPageChange={(newPage) => setPage(newPage)}
+          // onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
           onSortModelChange={(newSortModel) => setSort(...newSortModel)}
           components={{ Toolbar: DataGridCustomToolbar }}
           componentsProps={{

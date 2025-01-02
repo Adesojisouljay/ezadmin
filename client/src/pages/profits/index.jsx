@@ -153,6 +153,9 @@ const Profits = () => {
           getRowId={(row) => row?._id}
           rows={profits}
           columns={columns}
+          autoHeight
+          pageSize={10}
+          rowsPerPageOptions={[10, 20, 50]}
         />
       </Box>
     </Box>
