@@ -23,6 +23,28 @@ export const loginUser = async (userData) => {
   }
 };
 
+export const deleteUser = async (userId) => {
+  try {
+
+    const response = await api.delete(`/auth/${userId}`, {
+      headers: {
+        Authorization: authToken,
+      },
+    });
+
+    if (response?.data.success) {
+      console.log("User deleted successfully");
+      return response?.data;
+    } else {
+      console.error("Failed to delete user:", response?.data?.message);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    throw error.message;
+  }
+};
+
 export const getAllUsers = async () => {
     try {
   

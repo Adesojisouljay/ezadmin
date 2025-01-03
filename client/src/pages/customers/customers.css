@@ -6,6 +6,10 @@
     margin-top: 40px;
     height: 75vh;
   }
+
+  .delete-user-btn{
+    margin-left: 150px;
+  }
   
   .MuiDataGrid-root {
     border: none;

@@ -3,7 +3,7 @@ import { Box, Button, Modal, TextField, Typography, Divider, MenuItem, Select, F
 import Header from "components/Header";
 import { DataGrid } from "@mui/x-data-grid";
 import './customers.css';
-import { getAllUsers, editUser, toggleUserSuspension } from "../../api/index";
+import { getAllUsers, editUser, toggleUserSuspension, deleteUser } from "../../api/index";
 
 const Customers = () => {
   const [data, setData] = useState([]);
@@ -11,6 +11,9 @@ const Customers = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [addAmount, setAddAmount] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
+
 
   useEffect(() => {
     const getUsers = async () => {
@@ -28,6 +31,22 @@ const Customers = () => {
     };
     getUsers();
   }, []);
+
+  const handleSearch = (e) => {
+    const value = e.target.value.toLowerCase();
+    setSearchTerm(value);
+    console.log(value)
+
+    const filtered = data.filter(
+      (user) =>
+        user.username?.toLowerCase().includes(value) ||
+        user.email?.toLowerCase().includes(value) ||
+        user._id?.toLowerCase().includes(value)
+    );
+    console.log("data.....",data)
+    console.log(filtered)
+    setFilteredData(filtered);
+  };
 
   const handleOpenModal = (user) => {
     const firstAssetIndex = user.assets?.length ? 0 : undefined;
@@ -90,6 +109,28 @@ const Customers = () => {
     }
   };
 
+  const deleUserFromDb = async (userId) => {
+    setIsLoading(true);
+    try {
+      const resp = await deleteUser(userId);
+      console.log(resp);
+  
+      setData((prevData) => prevData.filter((user) => user._id !== userId));
+  
+      if (searchTerm) {
+        setFilteredData((prevFilteredData) =>
+          prevFilteredData.filter((user) => user._id !== userId)
+        );
+      }
+  
+      setIsLoading(false);
+      handleCloseModal();
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+  };
+
   const columns = [
     { field: "_id", headerName: "User Id", flex: 1 },
     { field: "firstName", headerName: "First Name", flex: 0.5 },
@@ -112,12 +153,26 @@ const Customers = () => {
   return (
     <Box className="customers-container">
       <Header title="CUSTOMERS" subtitle="List of Customers" />
+
+      {/* Search Bar */}
+      <TextField
+        label="Search by Username, Email, or ID"
+        value={searchTerm}
+        onChange={handleSearch}
+        fullWidth
+        margin="normal"
+      />
+
       <Box className="customers-data-grid">
         <DataGrid
           loading={isLoading}
           getRowId={(row) => row?._id}
-          rows={data}
+          // rows={data}
+          rows={filteredData?.length > 0 ? filteredData : data}
           columns={columns}
+          autoHeight
+          pageSize={10}
+          rowsPerPageOptions={[10, 20, 50]}
         />
       </Box>
 
@@ -153,6 +208,17 @@ const Customers = () => {
                 labelPlacement="start"
                 sx={{ '.MuiFormControlLabel-label': { fontWeight: 'bold' } }}
               />
+
+              <Button
+                variant="contained"
+                color="error"
+                // size="small"
+                onClick={() => deleUserFromDb(selectedUser._id)}
+                className="delete-user-btn"
+                >
+                Delete
+              </Button>
+
               {/* Basic User Information */}
               <TextField
                 label="First Name"
