@@ -55,8 +55,8 @@ const FiatDepositManagement = () => {
 
   const filterDeposits = () => {
     const filtered = deposits.filter((deposit) =>
-      deposit.user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      deposit.user.email.toLowerCase().includes(searchTerm.toLowerCase())
+      deposit.user?.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      deposit.user?.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredDeposits(filtered);
   };
