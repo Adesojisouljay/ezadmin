@@ -3,7 +3,7 @@ import { Box, Button, Modal, TextField, Typography, Divider, MenuItem, Select, F
 import Header from "components/Header";
 import { DataGrid } from "@mui/x-data-grid";
 import './customers.css';
-import { getAllUsers, editUser, toggleUserSuspension, deleteUser } from "../../api/index";
+import { getAllUsers, editUser, toggleUserSuspension, deleteUser, adminAddUserAsset } from "../../api/index";
 
 const Customers = () => {
   const [data, setData] = useState([]);
@@ -13,6 +13,7 @@ const Customers = () => {
   const [addAmount, setAddAmount] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState([]);
+  const [newAsset, setNewAsset] = useState(null)
 
 
   useEffect(() => {
@@ -131,6 +132,15 @@ const Customers = () => {
     }
   };
 
+  const addUserAsset = async (userId, coinId) => {
+    try {
+      const result = await adminAddUserAsset(userId, coinId);
+      console.log(result)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const columns = [
     { field: "_id", headerName: "User Id", flex: 1 },
     { field: "firstName", headerName: "First Name", flex: 0.5 },
@@ -218,6 +228,29 @@ const Customers = () => {
                 >
                 Delete
               </Button>
+
+              {/* Add user asset */}
+              <FormControl fullWidth margin="normal">
+                <InputLabel>Add New Asset</InputLabel>
+                <Select
+                  value={newAsset}
+                  onChange={(e) => setNewAsset(e.target.value)}
+                >
+                  <MenuItem value="bitcoin">Bitcoin</MenuItem>
+                  <MenuItem value="hive">Hive</MenuItem>
+                  <MenuItem value="hbd">HBD</MenuItem>
+                  {/* Add more assets if needed */}
+                </Select>
+              </FormControl>
+
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => addUserAsset(selectedUser._id, newAsset)}
+              >
+                Add Asset
+              </Button>
+
 
               {/* Basic User Information */}
               <TextField

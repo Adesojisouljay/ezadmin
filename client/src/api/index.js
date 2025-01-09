@@ -610,3 +610,29 @@ export const updateMerchantWithdrawalBalance = async ({ merchantId, amount, oper
     throw error.response?.data || error;
   }
 };
+
+//////Add asset to user's profile
+export const adminAddUserAsset = async (userId, coinId) => {
+  try {
+    const response = await api.post(
+      `/auth/admin/add-asset`,
+      { userId, coinId },
+      {
+        headers: {
+          Authorization: authToken,
+        },
+      }
+    );
+
+    if (response?.data?.success) {
+      console.log('Asset added successfully:', response.data);
+      return response.data;
+    } else {
+      console.error('Failed to add asset:', response?.data?.message);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error adding asset:', error);
+    throw error;
+  }
+};
