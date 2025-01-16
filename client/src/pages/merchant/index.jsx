@@ -279,7 +279,7 @@ const MerchantManagement = () => {
       />
       {/* Merchant Details Modal */}
       {selectedMerchant && (
-        <Dialog open={isModalOpen} onClose={handleCloseModal} maxWidth="md" fullWidth>
+        <Dialog open={isModalOpen} onClose={handleCloseModal} maxWidth="lg" fullWidth>
           <DialogTitle>Merchant Details</DialogTitle>
 
             <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
@@ -287,15 +287,15 @@ const MerchantManagement = () => {
                 <DialogActions style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                     <DialogTitle style={{display: "flex", alignItems: "center", gap: "2px"}}>
                         Last Topped:{" "}
-                        <span style={{ fontWeight: "bold", fontSize: "18px" }}>{selectedMerchant.lastToppedAmount}</span>
+                        <span style={{ fontWeight: "bold", fontSize: "18px" }}>{selectedMerchant.lastToppedAmount?.toFixed(2)}</span>
                     </DialogTitle>
                     <DialogTitle style={{display: "flex", alignItems: "center", gap: "2px"}}>
                         Total Spent:{" "}
-                        <span style={{ fontWeight: "bold", fontSize: "18px" }}>{selectedMerchant.totalSpent}</span>
+                        <span style={{ fontWeight: "bold", fontSize: "18px" }}>{selectedMerchant.totalSpent?.toFixed(2)}</span>
                     </DialogTitle>
                     <DialogTitle style={{display: "flex", alignItems: "center", gap: "2px"}}>
                         Merchant Balance:{" "}
-                        <span style={{ fontWeight: "bold", fontSize: "18px" }}>{selectedMerchant.merchantBalance}</span>
+                        <span style={{ fontWeight: "bold", fontSize: "18px" }}>{selectedMerchant.merchantBalance?.toFixed(2)}</span>
                     </DialogTitle>
                     <TextField
                         label="Update merchant balance"
@@ -323,15 +323,15 @@ const MerchantManagement = () => {
               <DialogActions style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                   <DialogTitle style={{display: "flex", alignItems: "center", gap: "2px"}}>
                       Last Topped:{" "}
-                      <span style={{ fontWeight: "bold", fontSize: "18px" }}>{selectedMerchant.lastToppedWithdrawalAmount}</span>
+                      <span style={{ fontWeight: "bold", fontSize: "18px" }}>{selectedMerchant.lastToppedWithdrawalAmount?.toFixed(2)}</span>
                   </DialogTitle>
                   <DialogTitle style={{display: "flex", alignItems: "center", gap: "2px"}}>
                       Total Spent:{" "}
-                      <span style={{ fontWeight: "bold", fontSize: "18px" }}>{selectedMerchant.totalWithdrawalSpent}</span>
+                      <span style={{ fontWeight: "bold", fontSize: "18px" }}>{selectedMerchant.totalWithdrawalSpent?.toFixed(2)}</span>
                   </DialogTitle>
                   <DialogTitle style={{display: "flex", alignItems: "center", gap: "2px"}}>
                       Merchant Balance:{" "}
-                      <span style={{ fontWeight: "bold", fontSize: "18px" }}>{selectedMerchant.merchantWithdrawalBalance}</span>
+                      <span style={{ fontWeight: "bold", fontSize: "18px" }}>{selectedMerchant.merchantWithdrawalBalance?.toFixed(2)}</span>
                   </DialogTitle>
                   <TextField
                       label="Update merchant balance"
