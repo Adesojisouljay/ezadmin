@@ -12,13 +12,13 @@ export const loginUser = async (userData) => {
       localStorage.setItem('token', response?.data.token);
       return response; 
     } else {
-      console.error('Failed to login:', response?.message);
+      console.log('Failed to login:', response?.message);
       console.log(response)
 
       return null;
     }
   } catch (error) {
-    console.error('Error logging in:', error);
+    console.log('Error logging in:', error);
     throw error.message;
   }
 };
@@ -36,11 +36,11 @@ export const deleteUser = async (userId) => {
       console.log("User deleted successfully");
       return response?.data;
     } else {
-      console.error("Failed to delete user:", response?.data?.message);
+      console.log("Failed to delete user:", response?.data?.message);
       return null;
     }
   } catch (error) {
-    console.error("Error deleting user:", error);
+    console.log("Error deleting user:", error);
     throw error.message;
   }
 };
@@ -54,12 +54,12 @@ export const getAllUsers = async () => {
         // dispatch(updateUser({ user: response.data.user }));
         return response.data; 
       } else {
-        console.error('Failed to fetch profile:', response.data.message);
+        console.log('Failed to fetch profile:', response.data.message);
   
         return null;
       }
     } catch (error) {
-      console.error('Error fetching profile:', error);
+      console.log('Error fetching profile:', error);
   
       return null;
     }
@@ -70,7 +70,7 @@ export const getAllUsers = async () => {
       const response = await api.get(`/transactions/all`);
       return response.data;
     } catch (error) {
-      console.error('Error fetching transaction history:', error);
+      console.log('Error fetching transaction history:', error);
       throw error;
     }
   };
@@ -80,11 +80,11 @@ export const getAllUsers = async () => {
       const response = await api.get('/crypto-data');
       if (response?.data?.success) {
       } else {
-        console.error('Failed to fetch data:', response?.data?.message);
+        console.log('Failed to fetch data:', response?.data?.message);
       }
       return response;
     } catch (error) {
-      console.error('Error fetching data from /crypto-data endpoint:', error);
+      console.log('Error fetching data from /crypto-data endpoint:', error);
       return { data: { success: false, message: 'An error occurred while fetching the data.' } };
     }
   };
@@ -102,11 +102,11 @@ export const getAllUsers = async () => {
         // console.log('Fetched all KYC records:', response.data.data);
         return response.data.data;
       } else {
-        console.error('Failed to fetch KYC records:', response.data.message);
+        console.log('Failed to fetch KYC records:', response.data.message);
         return [];
       }
     } catch (error) {
-      console.error('Error fetching KYC records:', error.message);
+      console.log('Error fetching KYC records:', error.message);
       return [];
     }
   };
@@ -127,10 +127,10 @@ export const getAllUsers = async () => {
       if (response.data.success) {
         console.log('KYC approved successfully:', response.data.message);
       } else {
-        console.error('KYC approval failed:', response.data.message);
+        console.log('KYC approval failed:', response.data.message);
       }
     } catch (error) {
-      console.error('Error approving KYC:', error.message);
+      console.log('Error approving KYC:', error.message);
     }
   };
   
@@ -150,10 +150,10 @@ export const getAllUsers = async () => {
       if (response.data.success) {
         console.log('KYC rejected successfully:', response.data.message);
       } else {
-        console.error('KYC rejection failed:', response.data.message);
+        console.log('KYC rejection failed:', response.data.message);
       }
     } catch (error) {
-      console.error('Error rejecting KYC:', error.message);
+      console.log('Error rejecting KYC:', error.message);
     }
   };
 
@@ -183,7 +183,7 @@ export const getAllUsers = async () => {
       });
       return response.data;
     } catch (error) {
-      console.error('Error confirming fiat withdrawal:', error);
+      console.log('Error confirming fiat withdrawal:', error);
       throw error.response.data;
     }
   };
@@ -200,7 +200,7 @@ export const getAllUsers = async () => {
       });
       return response.data;
     } catch (error) {
-      console.error('Error canceling fiat withdrawal:', error);
+      console.log('Error canceling fiat withdrawal:', error);
       throw error.response.data;
     }
   };
@@ -214,7 +214,7 @@ export const getAllUsers = async () => {
       });
       return response.data;
     } catch (error) {
-      console.error('Error fetching fiat withdrawals:', error);
+      console.log('Error fetching fiat withdrawals:', error);
       throw error.response.data;
     }
   };
@@ -227,7 +227,7 @@ export const getAllUsers = async () => {
       console.log(response)
       return response.data;
     } catch (error) {
-      console.error('Failed to fetch fiat deposits:', error);
+      console.log('Failed to fetch fiat deposits:', error);
       throw error;
     }
   };
@@ -241,7 +241,7 @@ export const getAllUsers = async () => {
       );
       return response.data;
     } catch (error) {
-      console.error('Failed to confirm fiat deposit:', error);
+      console.log('Failed to confirm fiat deposit:', error);
       throw error;
     }
   };
@@ -255,7 +255,7 @@ export const getAllUsers = async () => {
       );
       return response.data;
     } catch (error) {
-      console.error('Failed to cancel fiat deposit:', error);
+      console.log('Failed to cancel fiat deposit:', error);
       throw error;
     }
   };
@@ -277,11 +277,11 @@ export const getAllUsers = async () => {
         console.log('User updated successfully:', response.data.message);
         return response.data;
       } else {
-        console.error('Failed to update user:', response.data.message);
+        console.log('Failed to update user:', response.data.message);
         return null;
       }
     } catch (error) {
-      console.error('Error updating user:', error.message);
+      console.log('Error updating user:', error.message);
       return null;
     }
   };
@@ -293,7 +293,7 @@ export const getAllUsers = async () => {
       });
       return response.data;
     } catch (error) {
-      console.error('Error fetching all profits:', error);
+      console.log('Error fetching all profits:', error);
       throw error;
     }
   };
@@ -305,7 +305,7 @@ export const getAllUsers = async () => {
       });
       return response.data;
     } catch (error) {
-      console.error('Error fetching profits by user ID:', error);
+      console.log('Error fetching profits by user ID:', error);
       throw error;
     }
   };
@@ -317,7 +317,7 @@ export const getAllUsers = async () => {
       });
       return response.data;
     } catch (error) {
-      console.error('Error fetching profit by transaction ID:', error);
+      console.log('Error fetching profit by transaction ID:', error);
       throw error;
     }
   };
@@ -329,7 +329,7 @@ export const getAllUsers = async () => {
       });
       return response.data;
     } catch (error) {
-      console.error('Error fetching profits by time period:', error);
+      console.log('Error fetching profits by time period:', error);
       throw error;
     }
   };
@@ -349,17 +349,17 @@ export const getAllUsers = async () => {
       if (response.data.success) {
         console.log("Broadcast email sent successfully!");
       } else {
-        console.error("Failed to send broadcast email:", response.data.message);
+        console.log("Failed to send broadcast email:", response.data.message);
       }
     } catch (error) {
-      console.error("Error sending broadcast email:", error);
+      console.log("Error sending broadcast email:", error);
     }
   };
 
   export const updatePricePercentage = async (newPercentage) => {
     try {
   
-      const response = await api.post('/prices/update-price-percentage', { newPercentage }, {
+      const response = await api.post('/prices/update-price-percentage', newPercentage , {
         headers: {
           Authorization: authToken,
         },
@@ -368,7 +368,7 @@ export const getAllUsers = async () => {
      return response.data
   
     } catch (error) {
-      console.error('Error updating price percentage:', error.message);
+      console.log('Error updating price percentage:', error.message);
       return { success: false, message: error.message };
     }
   };
@@ -385,7 +385,7 @@ export const getAllUsers = async () => {
      return response.data
   
     } catch (error) {
-      console.error('Error updating price percentage:', error.message);
+      console.log('Error updating price percentage:', error.message);
       return { success: false, message: error.message };
     }
   };
@@ -402,11 +402,11 @@ export const getAllUsers = async () => {
         console.log(response.data.message);
         return response.data;
       } else {
-        console.error('Failed to update user status:', response?.data?.message);
+        console.log('Failed to update user status:', response?.data?.message);
         return null;
       }
     } catch (error) {
-      console.error('Error updating user status:', error);
+      console.log('Error updating user status:', error);
       throw error;
     }
   };
@@ -423,11 +423,11 @@ export const getAllUsers = async () => {
         console.log(response.data.message);
         return response.data;
       } else {
-        console.error('Failed to update user status:', response?.data?.message);
+        console.log('Failed to update user status:', response?.data?.message);
         return null;
       }
     } catch (error) {
-      console.error('Error updating user status:', error);
+      console.log('Error updating user status:', error);
       throw error;
     }
   };
@@ -444,11 +444,11 @@ export const getAllUsers = async () => {
         console.log(response.data);
         return response.data;
       } else {
-        console.error('Failed to update user status:', response?.data?.message);
+        console.log('Failed to update user status:', response?.data?.message);
         return null;
       }
     } catch (error) {
-      console.error('Error updating user status:', error);
+      console.log('Error updating user status:', error);
       throw error;
     }
   };
@@ -577,11 +577,11 @@ export const updateMerchantBalance = async ({ merchantId, amount, operation }) =
       console.log("Merchant balance updated successfully:", response.data);
       return response.data;
     } else {
-      console.error("Failed to update merchant balance:", response?.data?.message);
+      console.log("Failed to update merchant balance:", response?.data?.message);
       return null;
     }
   } catch (error) {
-    console.error("Error updating merchant balance:", error.response?.data || error.message);
+    console.log("Error updating merchant balance:", error.response?.data || error.message);
     throw error.response?.data || error;
   }
 };
@@ -602,11 +602,11 @@ export const updateMerchantWithdrawalBalance = async ({ merchantId, amount, oper
       console.log("Merchant balance updated successfully:", response.data);
       return response.data;
     } else {
-      console.error("Failed to update merchant balance:", response?.data?.message);
+      console.log("Failed to update merchant balance:", response?.data?.message);
       return null;
     }
   } catch (error) {
-    console.error("Error updating merchant balance:", error.response?.data || error.message);
+    console.log("Error updating merchant balance:", error.response?.data || error.message);
     throw error.response?.data || error;
   }
 };
@@ -628,11 +628,11 @@ export const adminAddUserAsset = async (userId, coinId) => {
       console.log('Asset added successfully:', response.data);
       return response.data;
     } else {
-      console.error('Failed to add asset:', response?.data?.message);
+      console.log('Failed to add asset:', response?.data?.message);
       return null;
     }
   } catch (error) {
-    console.error('Error adding asset:', error);
+    console.log('Error adding asset:', error);
     throw error;
   }
 };

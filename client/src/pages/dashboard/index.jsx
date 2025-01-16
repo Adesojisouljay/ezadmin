@@ -34,6 +34,7 @@ const Dashboard = () => {
   const [currentPercentage, setCurrentPercentage] = useState(0)
   const [isLoadingPercentage, setIsLoadingPercentage] = useState(false);
   const [maintenanceMode, setMaintenanceMode] = useState(false);
+  const [newHbdPercentage, setNewHbdPercentage] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -92,6 +93,7 @@ const Dashboard = () => {
       setError(null);
       try {
         const response = await getCurrenctPricePercentage();
+        console.log("object...resp", response)
         if (response?.success) {
           setCurrentPercentage(response?.currentPercentage);
         } else {
@@ -256,12 +258,19 @@ const Dashboard = () => {
 
   const updatePrices = async () => {
     try {
-      const response = await updatePricePercentage(newPercent)
+      const response = await updatePricePercentage({ 
+        newCryptoPercentage: newPercent || undefined,
+        newHbdPercentage: newHbdPercentage || undefined
+      });
+      
+      if (response.success) {
+        console.log("Price percentage updated successfully!");
+      }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
-
+  };
+  
   const toggleMaintenanceMode = async () => {
     console.log(maintenanceMode)
     try {
@@ -317,22 +326,42 @@ const Dashboard = () => {
         </Box>
         
         <Box >
-        <>
-          <h2>Update Price Percent</h2>
-          <h3>Currenct Percentage: {currentPercentage}%</h3>
-          <Box display="flex" flexDirection="flex" alignItems="center">
+          <>
+            <h2>Update Price Percent</h2>
+            <h3>Currenct Percentage: {currentPercentage?.cryptoAdjustmentPercentage}%</h3>
+            <Box display="flex" flexDirection="flex" alignItems="center">
+              <input
+                type="number"
+                value={newPercent || null}
+                onChange={(e) => setNewPercent(Number(e.target.value))}
+                placeholder="Enter new percentage"
+                style={{ marginBottom: '10px', padding: '5px', width: '300px' }}
+              />
+              <Button variant="contained" color="primary" width="150px" onClick={updatePrices}>
+                {isLoadingPercentage ? "Update..." :  "Update"}
+              </Button>
+            </Box>
+          </>
+        </Box>
+
+      {/* HBD PRICE % */}
+        <Box >
+          <>
+            <h2>Update HBD Price Percent</h2>
+            <h3>Current HBD Percentage: {currentPercentage?.hbdAdjustmentPercentage}%</h3>
+            <Box display="flex" flexDirection="flex" alignItems="center">
             <input
               type="number"
-              value={newPercent || null}
-              onChange={(e) => setNewPercent(Number(e.target.value))}
-              placeholder="Enter new percentage"
+              value={newHbdPercentage || ""}
+              onChange={(e) => setNewHbdPercentage(Number(e.target.value))}
+              placeholder="Enter new HBD percentage"
               style={{ marginBottom: '10px', padding: '5px', width: '300px' }}
             />
-            <Button variant="contained" color="primary" width="150px" onClick={updatePrices}>
-              {isLoadingPercentage ? "Update..." :  "Update"}
-            </Button>
-          </Box>
-        </>
+              <Button variant="contained" color="primary" width="150px" onClick={updatePrices}>
+                {isLoadingPercentage ? "Update..." :  "Update"}
+              </Button>
+            </Box>
+          </>
         </Box>
 
         {/* Maintenance Mode Switch */}
