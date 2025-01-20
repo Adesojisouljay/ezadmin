@@ -3,7 +3,6 @@ import './index.css';
 
 export const KycImageModal = ({ idDocumentUrl, selfieUrl, onClose, userProfile }) => {
 
-    console.log(userProfile)
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>

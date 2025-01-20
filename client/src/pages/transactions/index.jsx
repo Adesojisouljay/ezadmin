@@ -23,7 +23,6 @@ const Transactions = () => {
       setIsLoading(true);
       try {
         const response = await getAllTransactions();
-        console.log(response);
         if (response.success) {
           setData(response.transactionH || []);
           setFilteredData(response.transactionH?.reverse() || []);

@@ -36,7 +36,6 @@ const Customers = () => {
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
     setSearchTerm(value);
-    console.log(value)
 
     const filtered = data.filter(
       (user) =>
@@ -44,8 +43,6 @@ const Customers = () => {
         user.email?.toLowerCase().includes(value) ||
         user._id?.toLowerCase().includes(value)
     );
-    console.log("data.....",data)
-    console.log(filtered)
     setFilteredData(filtered);
   };
 
@@ -79,7 +76,6 @@ const Customers = () => {
       }
 
       const updatedUser = await editUser(selectedUser?._id, selectedUser);
-      console.log(updatedUser)
       setData((prevData) => prevData.map(user => user?._id === updatedUser?._id ? updatedUser : user));
       handleCloseModal();
       window.location.reload();
@@ -103,7 +99,6 @@ const Customers = () => {
   const toggleUserStatus = async (userId, isSuspended) => {
     try {
       const response = await toggleUserSuspension(userId, isSuspended);
-      console.log(response)
       window.location.reload();
     } catch (error) {
       console.log("Error toggling user suspension:", error);
@@ -114,7 +109,6 @@ const Customers = () => {
     setIsLoading(true);
     try {
       const resp = await deleteUser(userId);
-      console.log(resp);
   
       setData((prevData) => prevData.filter((user) => user._id !== userId));
   
@@ -135,7 +129,6 @@ const Customers = () => {
   const addUserAsset = async (userId, coinId) => {
     try {
       const result = await adminAddUserAsset(userId, coinId);
-      console.log(result)
     } catch (error) {
       console.log(error)
     }

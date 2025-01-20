@@ -93,7 +93,6 @@ const Dashboard = () => {
       setError(null);
       try {
         const response = await getCurrenctPricePercentage();
-        console.log("object...resp", response)
         if (response?.success) {
           setCurrentPercentage(response?.currentPercentage);
         } else {
@@ -114,7 +113,6 @@ const Dashboard = () => {
       try {
         const response = await getAppMode();
         // if (response?.data?.message) {
-          console.log(response?.maintenanceRecord?.isMaintenance);
           setMaintenanceMode(response?.maintenanceRecord?.isMaintenance);
         // } else {
           // console.error("Failed to toggle maintenance mode:", response?.data?.message);
@@ -272,10 +270,8 @@ const Dashboard = () => {
   };
   
   const toggleMaintenanceMode = async () => {
-    console.log(maintenanceMode)
     try {
       const response = await toggleAppMode(!maintenanceMode);
-      console.log(response.maintenanceRecord.isMaintenance)
       setMaintenanceMode(response.maintenanceRecord.isMaintenance)
       
     } catch (error) {

@@ -59,7 +59,6 @@ const Kyc = () => {
   const fetchUserProfile = async (userId) => {
     try {
       const userProfile = await getUserProfile(userId);
-      console.log(userProfile)
       return userProfile;
     } catch (error) {
       console.error("Error fetching user KYC data:", error);
