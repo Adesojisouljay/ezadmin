@@ -35,7 +35,6 @@ const MerchantManagement = () => {
     setLoading(true);
     try {
       const result = await getAllMerchants();
-      console.log(result)
       if (result.success) {
         setMerchants(result.data);
       } else {
@@ -119,7 +118,6 @@ const MerchantManagement = () => {
         amount: Number(newMerchantBalance),
         operation: "set",
       });
-      console.log(result);
       if (result?.success) {
         const updatedBalance = result.data.updatedBalance;
         
@@ -139,7 +137,7 @@ const MerchantManagement = () => {
         );
         setNewMerchantBalance(0);
   
-        console.log("Updated Balance:", updatedBalance);
+        console.log("Updated Balance:");
       }
     } catch (error) {
       console.error("Failed to update merchant balance:", error);
@@ -153,7 +151,6 @@ const MerchantManagement = () => {
         amount: Number(newWithdrawalMerchantBalance),
         operation: "set",
       });
-      console.log(result);
       if (result?.success) {
         const updatedBalance = result.data.updatedBalance;
         
@@ -173,7 +170,7 @@ const MerchantManagement = () => {
         );
         setNewMerchantWithdrawalBalance(0);
   
-        console.log("Updated Balance:", updatedBalance);
+        console.log("Updated Balance:");
       }
     } catch (error) {
       console.error("Failed to update merchant balance:", error);

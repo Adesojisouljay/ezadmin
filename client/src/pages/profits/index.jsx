@@ -16,7 +16,7 @@ const Profits = () => {
       try {
         const response = await getAllProfits();
         if (response.success) {
-          setProfits(response.data);
+          setProfits(response.data?.reverse());
         }
       } catch (error) {
         console.log(error);

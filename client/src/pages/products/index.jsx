@@ -82,7 +82,6 @@ const Products = () => {
       setIsLoading(true);
       try {
         const response = await getCryptoData();
-        console.log(response);
         if (response.data.success) {
           setData(response.data.cryptoData.ngnData || []); // Assuming the response contains a 'data' field with the crypto info
         }

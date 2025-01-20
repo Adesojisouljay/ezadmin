@@ -21,7 +21,6 @@ export const Login = () => {
       };
 
       const response = await loginUser(userData);
-      console.log("response...", response);
 
       if (response && response?.data?.success) {
         // Store the token in localStorage

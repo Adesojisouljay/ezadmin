@@ -5,7 +5,6 @@ const authToken = localStorage.getItem("authToken")
 export const loginUser = async (userData) => {
   try {
     const response = await api.post('/auth/login', userData);
-    console.log(response)
     if (response?.data.success) {
       console.log('User logged in successfully');
 
@@ -13,7 +12,6 @@ export const loginUser = async (userData) => {
       return response; 
     } else {
       console.log('Failed to login:', response?.message);
-      console.log(response)
 
       return null;
     }
@@ -49,7 +47,6 @@ export const getAllUsers = async () => {
     try {
   
       const response = await api.get('/auth/users');
-      console.log(response)
       if (response.data.success) {
         // dispatch(updateUser({ user: response.data.user }));
         return response.data; 
@@ -99,7 +96,6 @@ export const getAllUsers = async () => {
       });
   
       if (response.data.success) {
-        // console.log('Fetched all KYC records:', response.data.data);
         return response.data.data;
       } else {
         console.log('Failed to fetch KYC records:', response.data.message);
@@ -125,7 +121,7 @@ export const getAllUsers = async () => {
       );
   
       if (response.data.success) {
-        console.log('KYC approved successfully:', response.data.message);
+        console.log('KYC approved successfully:');
       } else {
         console.log('KYC approval failed:', response.data.message);
       }
@@ -223,8 +219,7 @@ export const getAllUsers = async () => {
     try {
       const response = await api.get('/deposits/fiat', {
         headers: { Authorization: authToken },
-      });
-      console.log(response)
+      })
       return response.data;
     } catch (error) {
       console.log('Failed to fetch fiat deposits:', error);
@@ -274,7 +269,7 @@ export const getAllUsers = async () => {
       );
   
       if (response.data.success) {
-        console.log('User updated successfully:', response.data.message);
+        console.log('User updated successfully:');
         return response.data;
       } else {
         console.log('Failed to update user:', response.data.message);
@@ -345,7 +340,6 @@ export const getAllUsers = async () => {
         }
       });
       
-      console.log(response);
       if (response.data.success) {
         console.log("Broadcast email sent successfully!");
       } else {
@@ -399,7 +393,6 @@ export const getAllUsers = async () => {
       });
   
       if (response?.data?.message) {
-        console.log(response.data.message);
         return response.data;
       } else {
         console.log('Failed to update user status:', response?.data?.message);
@@ -441,7 +434,6 @@ export const getAllUsers = async () => {
       });
   
       if (response?.data?.message) {
-        console.log(response.data);
         return response.data;
       } else {
         console.log('Failed to update user status:', response?.data?.message);
@@ -454,7 +446,6 @@ export const getAllUsers = async () => {
   };
 
   export const createMerchant = async (merchantData) => {
-    console.log("authToken.....",authToken)
   try {
     const response = await api.post('/merchant/apply', merchantData, {
       headers: {
@@ -487,7 +478,6 @@ export const getMerchantById = async () => {
         Authorization: authToken,
       },
     });
-    console.log(response)
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -599,7 +589,7 @@ export const updateMerchantWithdrawalBalance = async ({ merchantId, amount, oper
     );
 
     if (response?.data.success) {
-      console.log("Merchant balance updated successfully:", response.data);
+      console.log("Merchant balance updated successfully:");
       return response.data;
     } else {
       console.log("Failed to update merchant balance:", response?.data?.message);
@@ -625,7 +615,7 @@ export const adminAddUserAsset = async (userId, coinId) => {
     );
 
     if (response?.data?.success) {
-      console.log('Asset added successfully:', response.data);
+      console.log('Asset added successfully:');
       return response.data;
     } else {
       console.log('Failed to add asset:', response?.data?.message);
