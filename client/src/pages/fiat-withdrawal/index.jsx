@@ -28,7 +28,7 @@ const FiatWithdrawalAction = () => {
     try {
       const response = await getAllFiatWithdrawals();
       console.log(".....",response)
-      setWithdrawals(response.withdrawals);
+      setWithdrawals(response.withdrawals?.reverse());
     } catch (error) {
       console.error("Failed to fetch fiat withdrawals", error);
     } finally {

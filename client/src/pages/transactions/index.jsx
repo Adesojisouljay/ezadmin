@@ -26,7 +26,7 @@ const Transactions = () => {
         console.log(response);
         if (response.success) {
           setData(response.transactionH || []);
-          setFilteredData(response.transactionH || []);
+          setFilteredData(response.transactionH?.reverse() || []);
           setTotal(response.total || 0);
         }
       } catch (error) {

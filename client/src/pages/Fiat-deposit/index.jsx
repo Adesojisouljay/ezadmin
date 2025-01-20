@@ -23,7 +23,7 @@ const FiatDepositManagement = () => {
     setIsLoading(true);
     try {
       const response = await getAllFiatDeposits();
-      setDeposits(response.data);
+      setDeposits(response.data?.reverse());
     } catch (error) {
       console.error("Failed to fetch fiat deposits", error);
     } finally {
