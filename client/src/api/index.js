@@ -86,6 +86,23 @@ export const getAllUsers = async () => {
     }
   };
 
+  export const getExchangeStat = async () => {
+    try {
+      const response = await api.get('/exchange-assets-stats'); // Correct endpoint
+  
+      if (response?.data?.success) {
+        console.log('Fetched Data:', response.data.exchangeStats); // Log successful data
+        return response.data.exchangeStats; // Return the stats directly
+      } else {
+        console.log('Failed to fetch data:', response?.data?.message);
+        return []; // Return an empty array if no data is found
+      }
+    } catch (error) {
+      console.error('Error fetching exchange stats:', error); // Detailed error log
+      return { success: false, message: 'An error occurred while fetching the data.' };
+    }
+  };  
+
   export const getAllKYC = async () => {
     try {
       const response = await api.get('/kyc/all', {
