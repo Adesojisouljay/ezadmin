@@ -11,7 +11,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import Header from "components/Header";
-import { getCryptoData } from "../../api/index";
+import { getCryptoData, getExchangeStat } from "../../api/index";
 import "./products.css";
 
 const Product = ({
@@ -82,6 +82,8 @@ const Products = () => {
       setIsLoading(true);
       try {
         const response = await getCryptoData();
+        const res = await getExchangeStat();
+        console.log("res....", res)
         if (response.data.success) {
           setData(response.data.cryptoData.ngnData || []); // Assuming the response contains a 'data' field with the crypto info
         }

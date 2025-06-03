@@ -23,6 +23,7 @@ const Transactions = () => {
       setIsLoading(true);
       try {
         const response = await getAllTransactions();
+        console.log(response)
         if (response.success) {
           setData(response.transactionH || []);
           setFilteredData(response.transactionH?.reverse() || []);
@@ -45,6 +46,7 @@ const Transactions = () => {
       const filtered = data.filter(
         (transaction) =>
           transaction._id.toLowerCase().includes(lowerCaseSearch) ||
+          transaction.trxId.includes(lowerCaseSearch) ||
           transaction.type.toLowerCase().includes(lowerCaseSearch)
       );
       setFilteredData(filtered);

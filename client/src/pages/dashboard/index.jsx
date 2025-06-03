@@ -348,7 +348,7 @@ const Dashboard = () => {
             <Box display="flex" flexDirection="flex" alignItems="center">
             <input
               type="number"
-              value={newHbdPercentage || ""}
+              value={newHbdPercentage ||null}
               onChange={(e) => setNewHbdPercentage(Number(e.target.value))}
               placeholder="Enter new HBD percentage"
               style={{ marginBottom: '10px', padding: '5px', width: '300px' }}
