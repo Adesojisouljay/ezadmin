@@ -30,11 +30,10 @@ const Dashboard = () => {
   const [isLoadingUsers, setIsLoadingUsers] = useState(false);
   const [isLoadingProfits, setIsLoadingProfits] = useState(false);
   const [error, setError] = useState(null);
-  const [newPercent, setNewPercent] = useState(0);
-  const [currentPercentage, setCurrentPercentage] = useState(0)
+  const [currentPercentage, setCurrentPercentage] = useState(0);
   const [isLoadingPercentage, setIsLoadingPercentage] = useState(false);
   const [maintenanceMode, setMaintenanceMode] = useState(false);
-  const [newHbdPercentage, setNewHbdPercentage] = useState(null);
+  const [newUsdtNgnRate, setNewUsdtNgnRate] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -255,17 +254,25 @@ const Dashboard = () => {
   };
 
   const updatePrices = async () => {
+    if (newUsdtNgnRate === '' || newUsdtNgnRate === null || isNaN(Number(newUsdtNgnRate))) return;
     try {
-      const response = await updatePricePercentage({ 
-        newCryptoPercentage: newPercent || undefined,
-        newHbdPercentage: newHbdPercentage || undefined
-      });
+      setIsLoadingPercentage(true);
+      const response = await updatePricePercentage({ newUsdtNgnRate: Number(newUsdtNgnRate) });
       
-      if (response.success) {
-        console.log("Price percentage updated successfully!");
+      if (response && response.success) {
+        console.log("USDT rate updated successfully!");
+        if (response.currentPercentage) {
+          setCurrentPercentage(response.currentPercentage);
+        } else {
+          const refreshed = await getCurrenctPricePercentage();
+          if (refreshed?.success) setCurrentPercentage(refreshed.currentPercentage);
+        }
+        setNewUsdtNgnRate("");
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error updating USDT rate:", error);
+    } finally {
+      setIsLoadingPercentage(false);
     }
   };
   
@@ -321,40 +328,21 @@ const Dashboard = () => {
           />
         </Box>
         
-        <Box >
+        {/* USDT / NGN BASE RATE */}
+        <Box>
           <>
-            <h2>Update Price Percent</h2>
-            <h3>Currenct Percentage: {currentPercentage?.cryptoAdjustmentPercentage}%</h3>
+            <h2>Update USDT / NGN Rate</h2>
+            <h3>Current USDT Rate: ₦{currentPercentage?.usdtNgnRate ? Number(currentPercentage.usdtNgnRate).toLocaleString() : '1,500'}</h3>
             <Box display="flex" flexDirection="flex" alignItems="center">
               <input
                 type="number"
-                value={newPercent || null}
-                onChange={(e) => setNewPercent(Number(e.target.value))}
-                placeholder="Enter new percentage"
-                style={{ marginBottom: '10px', padding: '5px', width: '300px' }}
+                value={newUsdtNgnRate}
+                onChange={(e) => setNewUsdtNgnRate(e.target.value)}
+                placeholder="Enter USDT rate (e.g. 1500)"
+                style={{ marginBottom: '10px', padding: '5px', width: '250px' }}
               />
               <Button variant="contained" color="primary" width="150px" onClick={updatePrices}>
-                {isLoadingPercentage ? "Update..." :  "Update"}
-              </Button>
-            </Box>
-          </>
-        </Box>
-
-      {/* HBD PRICE % */}
-        <Box >
-          <>
-            <h2>Update HBD Price Percent</h2>
-            <h3>Current HBD Percentage: {currentPercentage?.hbdAdjustmentPercentage}%</h3>
-            <Box display="flex" flexDirection="flex" alignItems="center">
-            <input
-              type="number"
-              value={newHbdPercentage ||null}
-              onChange={(e) => setNewHbdPercentage(Number(e.target.value))}
-              placeholder="Enter new HBD percentage"
-              style={{ marginBottom: '10px', padding: '5px', width: '300px' }}
-            />
-              <Button variant="contained" color="primary" width="150px" onClick={updatePrices}>
-                {isLoadingPercentage ? "Update..." :  "Update"}
+                {isLoadingPercentage ? "Updating..." : "Update"}
               </Button>
             </Box>
           </>
