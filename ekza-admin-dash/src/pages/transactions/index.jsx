@@ -43,9 +43,11 @@ const Transactions = () => {
       setFilteredData(data);
     } else {
       const lowerCaseSearch = search.toLowerCase();
+      console.log(data[0])
       const filtered = data.filter(
         (transaction) =>
           transaction._id.toLowerCase().includes(lowerCaseSearch) ||
+          transaction.userId.includes(lowerCaseSearch) ||
           transaction.trxId.includes(lowerCaseSearch) ||
           transaction.type.toLowerCase().includes(lowerCaseSearch)
       );
